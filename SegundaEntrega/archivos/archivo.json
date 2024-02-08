@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "azúcar",
+    "descritpion": "azúcar de los ingenios Tucumanos",
+    "price": 800,
+    "code": 345,
+    "stock": "30 unidades"
+  },
+  {
+    "id": 3,
+    "title": "leche de almendras",
+    "descritpion": "leche de almendras seleccionadas",
+    "price": 700,
+    "code": 567,
+    "stock": "500 unidades"
+  }
+]
