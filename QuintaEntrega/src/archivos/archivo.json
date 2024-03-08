@@ -1,0 +1,186 @@
+[
+  {
+    "id": 1,
+    "title": "azúcar",
+    "description": "azúcar de los ingenios Tucumanos",
+    "price": 800,
+    "code": 345,
+    "stock": "30 unidades"
+  },
+  {
+    "id": 2,
+    "title": "leche",
+    "description": "leche de tambo original",
+    "price": 1500,
+    "code": 123,
+    "stock": "80 unidades"
+  },
+  {
+    "id": 3,
+    "title": "arvejas",
+    "description": "arvejas de la mejor selección",
+    "price": 600,
+    "code": 678,
+    "stock": "130 unidades"
+  },
+  {
+    "id": 4,
+    "title": "leche de almendras",
+    "description": "leche de almendras seleccionadas",
+    "price": 700,
+    "code": 567,
+    "stock": "500 unidades"
+  },
+  {
+    "id": 5,
+    "title": "Yogur natural",
+    "description": "Yogur de alta calidad",
+    "price": 250,
+    "code": 123,
+    "stock": "200 unidades"
+  },
+  {
+    "id": 6,
+    "title": "Manzanas",
+    "description": "Manzanas frescas de temporada",
+    "price": 150,
+    "code": 456,
+    "stock": "300 unidades"
+  },
+  {
+    "id": 7,
+    "title": "Pan integral",
+    "description": "Pan integral recién horneado",
+    "price": 80,
+    "code": 789,
+    "stock": "100 unidades"
+  },
+  {
+    "id": 8,
+    "title": "Queso parmesano",
+    "description": "Queso parmesano italiano",
+    "price": 500,
+    "code": 234,
+    "stock": "50 unidades"
+  },
+  {
+    "id": 9,
+    "title": "Huevos orgánicos",
+    "description": "Huevos frescos de granja orgánica",
+    "price": 300,
+    "code": 567,
+    "stock": "150 unidades"
+  },
+  {
+    "id": 10,
+    "title": "Café colombiano",
+    "description": "Café de Colombia de alta calidad",
+    "price": 200,
+    "code": 890,
+    "stock": "200 unidades"
+  },
+  {
+    "id": 11,
+    "title": "Aceite de oliva virgen",
+    "description": "Aceite de oliva extraído en frío",
+    "price": 400,
+    "code": 345,
+    "stock": "80 unidades"
+  },
+  {
+    "id": 12,
+    "title": "Salmón fresco",
+    "description": "Salmón fresco del Atlántico",
+    "price": 600,
+    "code": 678,
+    "stock": "100 unidades"
+  },
+  {
+    "id": 13,
+    "title": "Miel pura",
+    "description": "Miel orgánica y sin aditivos",
+    "price": 150,
+    "code": 912,
+    "stock": "120 unidades"
+  },
+  {
+    "id": 14,
+    "title": "Pasta de trigo integral",
+    "description": "Pasta italiana de trigo integral",
+    "price": 100,
+    "code": 234,
+    "stock": "250 unidades"
+  },
+  {
+    "id": 15,
+    "title": "Jugo de naranja natural",
+    "description": "Jugo de naranja recién exprimido",
+    "price": 120,
+    "code": 555,
+    "stock": "300 unidades"
+  },
+  {
+    "id": 16,
+    "title": "Galletas de avena",
+    "description": "Galletas de avena caseras",
+    "price": 80,
+    "code": 777,
+    "stock": "180 unidades"
+  },
+  {
+    "id": 17,
+    "title": "Vinagre balsámico",
+    "description": "Vinagre balsámico de Módena",
+    "price": 350,
+    "code": 999,
+    "stock": "70 unidades"
+  },
+  {
+    "id": 18,
+    "title": "Yogur griego",
+    "description": "Yogur griego cremoso",
+    "price": 200,
+    "code": 111,
+    "stock": "200 unidades"
+  },
+  {
+    "id": 19,
+    "title": "Agua mineral",
+    "description": "Agua mineral natural",
+    "price": 50,
+    "code": 222,
+    "stock": "500 unidades"
+  },
+  {
+    "id": 20,
+    "title": "Tomates cherry",
+    "description": "Tomates cherry orgánicos",
+    "price": 180,
+    "code": 333,
+    "stock": "150 unidades"
+  },
+  {
+    "id": 21,
+    "title": "Pimientos rojos",
+    "description": "Pimientos rojos frescos",
+    "price": 120,
+    "code": 444,
+    "stock": "120 unidades"
+  },
+  {
+    "id": 22,
+    "title": "Pechuga de pollo",
+    "description": "Pechuga de pollo sin piel",
+    "price": 350,
+    "code": 666,
+    "stock": "100 unidades"
+  },
+  {
+    "id": 23,
+    "title": "Cebollas",
+    "description": "Cebollas blancas frescas",
+    "price": 80,
+    "code": 777,
+    "stock": "200 unidades"
+  }
+]
