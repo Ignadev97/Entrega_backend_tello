@@ -8,10 +8,9 @@ import { productManager } from '../managers/ProductManager.js'
 
 const manager = new productManager()
 
-router.get('/', async (req,res) => {
+router.get('/home', async (req,res) => {
 
     const products = await manager.getProducts()
-
 
     res.status(200).render('home', {products})
 })

@@ -182,5 +182,13 @@
     "price": 80,
     "code": 777,
     "stock": "200 unidades"
+  },
+  {
+    "id": 24,
+    "title": "galleta",
+    "description": "galleta de aniz dietética",
+    "price": "1235",
+    "code": "1235",
+    "stock": "180 unidades"
   }
 ]

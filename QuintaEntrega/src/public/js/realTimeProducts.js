@@ -15,3 +15,24 @@ function renderizarProductos(productos) {
       listaProductos.appendChild(li);
     });
   }
+
+const formulario = document.getElementById('formAgregarProducto')
+
+formulario.addEventListener("submit", (e) => {
+  e.preventDefault()
+
+  let nombre = document.getElementById('nombre').value
+  let description = document.getElementById('description').value
+  let price = document.getElementById('price').value
+  let code = document.getElementById('code').value
+  let stock = document.getElementById('stock').value
+
+  socket.emit("agregarProducto", {nombre, description, price, code, stock})
+
+  document.getElementById('nombre').value = ''
+  document.getElementById('description').value = ''
+  document.getElementById('price').value = ''
+  document.getElementById('code').value = ''
+  document.getElementById('stock').value = ''
+
+})

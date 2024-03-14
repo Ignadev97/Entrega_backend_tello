@@ -60,6 +60,11 @@ io.on("connection",async socket => {
     // console.log(data)
 
     socket.emit('datos', data)
+
+    socket.on('agregarProducto', async (producto) => {
+
+        manager.addProduct(producto.nombre, producto.description, producto.price, producto.code, producto.stock)
+    })
 })
 
 
