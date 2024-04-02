@@ -18,9 +18,6 @@ const manager = new productMongoManager()
 
 const PORT = 3000
 
-
-let io
-
 //app.use() -> método de express para montar middleware
 
 const app = express()
@@ -53,17 +50,34 @@ const server = app.listen(PORT, () => {
 
 
 //ESTO ME INCOMODA ACÁ. 
-io = new Server(server)
 
-io.on("connection",async socket => {
-    console.log(`se ha conectado el cliente con id ${socket.id}`)
+let mensajes=[]
+let usuarios=[]
+
+const io=new Server(server)   // websocket server
+
+io.on("connection", socket=>{
+    console.log(`Se conecto un cliente con id ${socket.id}`)
     
-    const data = await manager.getProducts()
-    socket.emit('datos', data)
-
-    socket.on('agregarProducto', (producto) => {
-       manager.addProduct(producto) //no sé porque no se actualiza como con fs
+    socket.on("presentacion", nombre=>{
+        usuarios.push({id:socket.id, nombre})
+        socket.emit("historial", mensajes)
+        // console.log(nombre)
+        socket.broadcast.emit("nuevoUsuario", nombre)
     })
+
+    socket.on("mensaje", (nombre, mensaje)=>{
+        mensajes.push({nombre, mensaje})
+        io.emit("nuevoMensaje", nombre, mensaje)
+    })
+
+    socket.on("disconnect", ()=>{
+        let usuario=usuarios.find(u=>u.id===socket.id)
+        if(usuario){
+            socket.broadcast.emit("saleUsuario", usuario.nombre)
+        }
+    })
+
 })
 
 
