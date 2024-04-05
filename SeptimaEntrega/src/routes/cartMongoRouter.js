@@ -8,6 +8,45 @@ const router = express.Router()
 const cartManager = new cartMongoManager()
 const productManager = new productMongoManager()
 
+
+
+//endpoint para crear un carrito
+//formato a pasar {"carrito":{"products":[]}}
+router.post('/', async (req,res) => {
+    try {
+
+        const {carrito} = req.body
+
+        const carritoCreado = await cartManager.addCart(carrito)
+
+        res.status(200).json({mensaje: `el carrito fue creado con éxito`, carritoCreado})
+    } catch (err) {
+        res.status(500).json({error: `no se pudo crear el carrito`, detalle: err.message})
+    }
+})
+
+
+//endpoint para agregar productos al carrito
+//formato a pasar: {"products":[{"product": "id del producto ya ingresado en db.products"}]}
+
+router.post('/:cid', async (req,res) => {
+    try {
+    let {cid} = req.params    
+    let {products} = req.body
+
+    if (!products) {
+       return res.status(400).json({message: "el formato del producto no es el correcto, por favor verifique."})
+    }
+
+    let productosAgregados = await cartManager.addProductsToCart(cid, products)
+
+    res.status(200).json({message: 'se agregaron los productos con éxito', productosAgregados})
+    } catch (err) {
+        res.status(500).json({ error: `no se pudo crear el carrito correctamente. ingrese los datos de un producto.`, detalle: err.message });
+    }    
+ 
+})
+
 //Obtener carrito con el id
 router.get('/:id', async (req, res) => {
     try {
@@ -50,17 +89,6 @@ router.delete('/:cid/products/:pid', async (req, res) => {
         res.status(500).json({ error: 'Error del servidor',detalle : err.message});
     }
 })
-
-//actualizar el carrito con un array de products con el formato de arriba
-// NO ME QUEDÓ CLARO QUE ME PIDE LA CONSIGNA EN ESTE ENDPOINT
-// router.put('/:id', (req, res) => {
-//     try {
-        
-//     } catch (err) {
-        
-//     }
-// })
-
 
 
 //endpoint que actualiza la prop quantity solamente del producto selecionado
@@ -120,40 +148,6 @@ router.delete('/:cid', async (req, res) => {
         res.status(500).json({ error: 'Error del servidor',detalle : err.message});
     }
 })
-
-
-
-//mandar un producto para que CREE un cart nuevo y SE LE AGREGUE EL PRODUCTO ENVIADO POR BODY 
-
-// actualización. El Endpoint no crea carrito, solo se trabaja por uno por ahora. 
-
-// formato a pasar: {"products":[{"product": "id del producto ya ingresado en db.products"}]}
-
-router.post('/', async (req,res) => {
-    try {
-    let {products} = req.body
-    const idCarritoHardcodeado = '660a2df660de54887af3a385'    //id de un solo carrito para trabajar solo sobre él por ahora
-    const productos = products
-     
-    if (!productos) {
-       return res.status(400).json({message: "el formato del producto no es el correcto, por favor verifique."})
-    }
-
-    let productosAgregados = await cartManager.addProductsToCart(idCarritoHardcodeado,productos)
-
-
-    res.status(200).json({message: 'se agregaron los productos con éxito', productosAgregados})
-    } catch (err) {
-        res.status(500).json({ error: `no se pudo crear el carrito correctamente. ingrese los datos de un producto.`, detalle: err.message });
-    }    
- 
-})
-
-
-//endpoint para agregar un pproducto a un carrito existente formato 
-// router.post('/', (req, res) => {
-//     let {products} = req.body 
-// })
 
 export default router
 

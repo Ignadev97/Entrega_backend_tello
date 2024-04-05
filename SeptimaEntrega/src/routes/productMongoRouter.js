@@ -1,7 +1,7 @@
 import express from 'express'
 import mongoose from "mongoose";
 import { productMongoManager } from '../dao/managers/productMongoManager.js'
-
+import { modeloProducts } from '../dao/models/models.js';
 
 const router = express.Router()
 
@@ -10,12 +10,53 @@ const productManager = new productMongoManager()
 // este sería el endpoint que debería recibir limit, page sort y query 
 router.get('/', async (req, res) => {
     try {
-        let productos = await productManager.getProducts()
+        let {pagina, limit, title, description, sort} = req.query
+    
+        //manejo de limit
+        if(!limit) {
+            limit = 5
+        }
+    
+        //manejo de pagina
+        if(!pagina) {
+            pagina=1
+        }
+    
+        //manejo de filtro de productos 
+        let query = {}
+    
+        if (title) {
+            query.title = title
+        }
+        if (description) {
+            query.description = description
+        }
 
-        res.status(200).json({productos})
-    } catch (err) {
-        res.status(500).json({ error: 'No se pudo leer el archivo de productos', detalle: err.message });
-    }
+        // manejo de orden 
+        let sortOptions = {}
+
+        if (sort == 'asc' || sort == 'desc') {
+            sortOptions = {price: sort == 'asc' ? 1 : -1}
+        }
+    
+        let {
+            docs:products,
+            totalPages,
+            prevPage, nextPage,
+            hasPrevPage, hasNextPage,
+            page,
+        } = await modeloProducts.paginate(query,{limit:limit, page:pagina, lean: true})
+
+        const prevLink = hasPrevPage ? `/api/products/${pagina - 1}` : null;
+        const nextLink = hasNextPage ? `/api/products/${pagina + 1}` : null;
+        
+        const resultado = {payload:{products}, totalPages, prevPage, nextPage, page, hasNextPage, hasPrevPage, prevLink, nextLink}
+
+        res.status(200).json({resultado})
+      } catch (err) {
+            console.error('Error al obtener productos:', err);
+            res.status(500).json({ error: 'Error interno del servidor' });
+      }
 })
 
 router.post('/', async (req, res) => {

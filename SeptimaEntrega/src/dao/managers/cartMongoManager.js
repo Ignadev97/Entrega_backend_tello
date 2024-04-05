@@ -2,9 +2,8 @@ import { modeloCarts } from "../models/models.js";
 import { modeloProducts } from "../models/models.js";
 
 export class cartMongoManager {
-    addCart = async (products) => {
+    addCart = async (cart) => {
         try {
-            const cart = {products}
             return await modeloCarts.create(cart)
         } catch (err) {
             console.log('error inesperado. Detalle:' , err.message)

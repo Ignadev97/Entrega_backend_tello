@@ -60,7 +60,6 @@ router.get('/chat', (req, res) => {
 
 
 router.get('/realtimeproducts', (req,res) => {
-
     res.setHeader('Content-Type','text/html').status(200).render('realTimeProducts')
 
 })
