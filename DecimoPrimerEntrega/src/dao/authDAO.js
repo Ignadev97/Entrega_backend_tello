@@ -1,6 +1,6 @@
 import { modeloUsers } from "./models/models.js";
 
-export class userMongoManager {
+export class authMongoDAO {
 
     addUser = async (usuario) => {
         try {
