@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import passport from "passport";
-import authController from "../controller/auth.controller";
+import authController from "../controller/auth.controller.js";
 
 //ruta de registro
 router.post("/registro", authController.register);

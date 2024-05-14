@@ -18,9 +18,11 @@ import inicializaPassport from './config/passport.config.js'
 import passport from 'passport'
 //cockieParser
 import cookieParser from 'cookie-parser'
+//config
+import config from './config/config.js'
 
 
-const PORT = 3000
+const PORT = config.PORT
 
 //app.use() -> método de express para montar middleware
 
@@ -96,7 +98,7 @@ io.on("connection", socket=>{
 
 const connect = async () => {
     try {
-        await mongoose.connect("mongodb+srv://ignaciotellodev:3376530037518001@cluster0.n9mzqxw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {dbName: "ecommerce"} )
+        await mongoose.connect(config.MONGO_URL, {dbName: config.DB_NAME} )
         console.log("db online")
     } catch (err) {
         console.log("Falló la conexión. Detalle ", err.message)
