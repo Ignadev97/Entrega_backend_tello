@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { SECRET, creaHash, validaPassword } from '../utils.js';
 import { userService } from '../services/users.services.js';
 import { carritoService } from '../services/carts.services.js';
+import { UserDTO } from "../dtos/usuariosDTO.js";
 
 export default class authController {
 
@@ -101,11 +102,12 @@ export default class authController {
 
     static getCurrentUser = (req,res)=>{
 
+        const usuarioFiltrado = new UserDTO(req.user)
 
         res.setHeader('Content-Type','application/json');
         res.status(200).json({
             mensaje:'Perfil usuario',
-            datosUsuario: req.user
+            datosUsuario: usuarioFiltrado
         });
     }
 
