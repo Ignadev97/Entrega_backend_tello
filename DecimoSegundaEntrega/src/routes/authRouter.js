@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 import passport from "passport";
 import authController from "../controller/auth.controller.js";
+import authorize from "../middlewares/authorize.js";
 
 //ruta de registro
 router.post("/registro", authController.register);
@@ -16,7 +17,7 @@ router.get("/logout", authController.logout);
 
 router.get(
   "/current",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }), authorize('user'),
   authController.getCurrentUser
 );
 
