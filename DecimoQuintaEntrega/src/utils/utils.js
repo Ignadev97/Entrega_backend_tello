@@ -4,8 +4,6 @@ import bcrypt from 'bcrypt'
 import winston from 'winston'
 
 
-export const SECRET = "nachokpo123"
-
 //config dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

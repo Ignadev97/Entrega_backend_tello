@@ -22,3 +22,13 @@
   message: 'Promesa no manejada: Cannot convert undefined or null to object',
   timestamp: '2024-06-17T21:35:24.772Z'
 }
+{
+  stack: 'TypeError: req.next is not a function\n' +
+    '    at done (/Users/nachorfs/Documents/Curso_backend_coderhouse_Ignacio_Tello/DecimoQuintaEntrega/node_modules/express/lib/response.js:1043:25)\n' +
+    '    at ExpressHandlebars.<anonymous> (/Users/nachorfs/Documents/Curso_backend_coderhouse_Ignacio_Tello/DecimoQuintaEntrega/node_modules/express-handlebars/dist/express-handlebars.js:213:17)\n' +
+    '    at Generator.next (<anonymous>)\n' +
+    '    at fulfilled (/Users/nachorfs/Documents/Curso_backend_coderhouse_Ignacio_Tello/DecimoQuintaEntrega/node_modules/express-handlebars/dist/express-handlebars.js:10:58)',
+  level: 'error',
+  message: 'Promesa no manejada: req.next is not a function',
+  timestamp: '2024-07-01T22:31:56.239Z'
+}

@@ -5,7 +5,7 @@ import viewRouter from './routes/viewRouter.js'
 import productMongoRouter from './routes/productRouter.js'
 import authRouter from './routes/authRouter.js'
 //utilidades
-import __dirname, { SECRET } from './utils/utils.js'
+import __dirname from './utils/utils.js'
 import path, { dirname } from 'path'
 //handlebars
 import handlebars from 'express-handlebars'
@@ -58,7 +58,7 @@ app.use(midLog)
 inicializaPassport()
 app.use(passport.initialize())
 //cookie parser
-app.use(cookieParser(SECRET))
+app.use(cookieParser(config.SECRET))
 
 //routers
 app.use('/api/cart', cartRouter)

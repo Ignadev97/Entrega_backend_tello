@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/", cartController.addCart);
 
 //endpoint para agregar productos al carrito
-//formato a pasar: {"products":[{"product": "id del producto ya ingresado en db.products"}]}
+//formato a pasar en body: {"products":[{"product": "id del producto ya ingresado en db.products"}]}
 
 router.post("/:cid", cartController.addProductsToCart);
 

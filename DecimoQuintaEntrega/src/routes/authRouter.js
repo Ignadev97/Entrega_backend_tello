@@ -13,13 +13,24 @@ router.post("/login", authController.login);
 // Ruta de cierre de sesión
 router.get("/logout", authController.logout);
 
-//ruta con para usuario autenticado
+//ruta current para usuario autenticado
 
 router.get(
   "/current",
-  passport.authenticate("jwt", { session: false }), authorize('user'),
+  passport.authenticate("jwt", { session: false }),
+  authorize("user"),
   authController.getCurrentUser
 );
+
+
+
+//endpoints para recuperar contraseña (usuario)
+router.post("/recupero01", authController.recupero01);
+
+router.get("/recupero02", authController.recupero02)
+
+router.post("/recupero03" , authController.recupero03)
+
 
 //github
 router.get(
@@ -34,10 +45,7 @@ router.get(
   authController.githubAuthCallback
 );
 
-router.post('/recupero01', authController.recupero01)
 
 router.get("/errorGitHub", authController.errorGithub);
-
-
 
 export default router;
