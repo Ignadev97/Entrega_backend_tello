@@ -5,220 +5,220 @@ import { fakerES_MX as faker } from "@faker-js/faker";
 export default class productController {
   static getProducts = async (req, res) => {
     try {
-      let { pagina, limite, title, description, sort } = req.query;
+        let { pagina, limite, title, description, sort } = req.query;
 
-      //manejo de limit
-      if (!limite) {
-        limite = 5;
-      }
+        //manejo de limit
+        if (!limite) {
+            limite = 5;
+        }
 
-      //manejo de pagina
-      if (!pagina) {
-        pagina = 1;
-      }
+        //manejo de pagina
+        if (!pagina) {
+            pagina = 1;
+        }
 
-      //manejo de filtro de productos
-      let query = {};
+        //manejo de filtro de productos
+        let query = {};
 
-      if (title) {
-        query.title = title;
-      }
-      if (description) {
-        query.description = description;
-      }
+        if (title) {
+            query.title = title;
+        }
+        if (description) {
+            query.description = description;
+        }
 
-      // manejo de orden
-      let sortOptions = {};
+        // manejo de orden
+        let sortOptions = {};
 
-      if (sort == "asc" || sort == "desc") {
-        sortOptions = { price: sort == "asc" ? 1 : -1 };
-      }
+        if (sort == "asc" || sort == "desc") {
+            sortOptions = { price: sort == "asc" ? 1 : -1 };
+        }
 
-      const parametrosPaginate = { query, limite, pagina };
+        const parametrosPaginate = { query, limite, pagina };
 
-      const resultadoPaginate = await productoService.obtenerProductos(
-        parametrosPaginate
-      );
+        const resultadoPaginate = await productoService.obtenerProductos(parametrosPaginate);
 
-      let {
-        products,
-        totalPages,
-        prevPage,
-        nextPage,
-        hasPrevPage,
-        hasNextPage,
-        page,
-      } = resultadoPaginate;
+        let {
+            products,
+            totalPages,
+            prevPage,
+            nextPage,
+            hasPrevPage,
+            hasNextPage,
+            page,
+        } = resultadoPaginate;
 
-      const prevLink = hasPrevPage ? `/api/products/${pagina - 1}` : null;
-      const nextLink = hasNextPage ? `/api/products/${pagina + 1}` : null;
+        const prevLink = hasPrevPage ? `/api/products/${pagina - 1}` : null;
+        const nextLink = hasNextPage ? `/api/products/${pagina + 1}` : null;
 
-      const resultado = {
-        products,
-        totalPages,
-        prevPage,
-        nextPage,
-        page,
-        hasNextPage,
-        hasPrevPage,
-        prevLink,
-        nextLink,
-      };
+        const resultado = {
+            products,
+            totalPages,
+            prevPage,
+            nextPage,
+            page,
+            hasNextPage,
+            hasPrevPage,
+            prevLink,
+            nextLink,
+        };
 
-      res
-        .setHeader("Content-Type", "text/html")
-        .status(200)
-        .render("home", resultado);
+        res
+            .setHeader("Content-Type", "text/html")
+            .status(200)
+            .render("home", resultado);
     } catch (err) {
-      console.error("Error al obtener productos:", err);
-      res.status(500).json({ error: "Error interno del servidor" });
+        logger.error("Error al obtener productos:", err);
+        res.status(500).json({ error: "Error interno del servidor" });
     }
-  };
+};
 
-  static addProduct = async (req, res) => {
-    let { title, description, price, code, stock } = req.body;
 
-    if (!title || !price || !code || !stock) {
+static addProduct = async (req, res) => {
+  let { title, description, price, code, stock } = req.body;
+
+  if (!title || !price || !code || !stock) {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({
-        error: "Faltan datos: título, precio, código y stock son obligarorios",
+          error: "Faltan datos: título, precio, código y stock son obligarorios",
       });
-    }
+  }
 
-    let existe = await productoService.obtenerProductoPorCodigo(code);
+  let existe = await productoService.obtenerProductoPorCodigo(code);
 
-    if (existe) {
+  if (existe) {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({
-        error: `el producto con el código ${code} ya está ingresado en la base de datos`,
+          error: `el producto con el código ${code} ya está ingresado en la base de datos`,
       });
-    }
+  }
 
-    try {
+  try {
       const productoAgregado = await productoService.agregarProducto({
-        title,
-        description,
-        price,
-        code,
-        stock,
+          title,
+          description,
+          price,
+          code,
+          stock,
       });
       res.setHeader("Content-Type", "application/json");
       res.status(200).json({
-        message: "se agregó el producto con éxito",
-        payload: productoAgregado,
+          message: "se agregó el producto con éxito",
+          payload: productoAgregado,
       });
-    } catch (err) {
+  } catch (err) {
+      logger.error("Error al agregar producto:", err);
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
-        error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: err.message,
+          error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+          detalle: err.message,
       });
-    }
-  };
+  }
+};
 
-  static getProductById = async (req, res) => {
-    let { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+static getProductById = async (req, res) => {
+  let { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({ error: `Id invalido` });
-    }
+  }
 
-    try {
+  try {
       let producto = await productoService.obtenerProductoPorId(id);
       if (producto) {
-        res.status(200).json({ producto });
+          res.status(200).json({ producto });
       } else {
-        res.setHeader("Content-Type", "application/json");
-        return res
-          .status(400)
-          .json({ error: `No existen usuarios con id ${id}` });
+          res.setHeader("Content-Type", "application/json");
+          return res
+              .status(400)
+              .json({ error: `No existen usuarios con id ${id}` });
       }
-    } catch (err) {
+  } catch (err) {
+      logger.error("Error al obtener producto por ID:", err);
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
-        error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: `${err.message}`,
+          error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+          detalle: `${err.message}`,
       });
-    }
-  };
+  }
+};
 
-  static modifyProductById = async (req, res) => {
-    let { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+
+static modifyProductById = async (req, res) => {
+  let { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({ error: `Id invalido` });
-    }
+  }
 
-    let aModificar = req.body;
-    if (aModificar._id) {
+  let aModificar = req.body;
+  if (aModificar._id) {
       delete aModificar._id;
-    }
+  }
 
-    let camposPermitidos = ["price", "description", "stock"];
-    let camposAmodificar = Object.keys(aModificar);
+  let camposPermitidos = ["price", "description", "stock"];
+  let camposAmodificar = Object.keys(aModificar);
 
-    let camposValidos = camposAmodificar.every((campo) =>
+  let camposValidos = camposAmodificar.every((campo) =>
       camposPermitidos.includes(campo)
-    );
+  );
 
-    if (!camposValidos || camposAmodificar.length === 0) {
+  if (!camposValidos || camposAmodificar.length === 0) {
       return res.status(400).json({
-        mensaje:
-          "Los atributos enviados no son correctos para modificar el producto. Se puede modificar el precio, la descripción y el stock",
+          mensaje: "Los atributos enviados no son correctos para modificar el producto. Se puede modificar el precio, la descripción y el stock",
       });
-    }
+  }
 
-    try {
-      let actualizado = await productoService.actualizarProducto(
-        id,
-        aModificar
-      );
+  try {
+      let actualizado = await productoService.actualizarProducto(id, aModificar);
       if (actualizado.modifiedCount > 0) {
-        res.status(200).json({
-          message: `Producto con id:${id} modificado`,
-        });
+          res.status(200).json({
+              message: `Producto con id:${id} modificado`,
+          });
       } else {
-        res.setHeader("Content-Type", "application/json");
-        return res
-          .status(400)
-          .json({ error: `No existen prdductos con id ${id}` });
+          res.setHeader("Content-Type", "application/json");
+          return res
+              .status(400)
+              .json({ error: `No existen productos con id ${id}` });
       }
-    } catch (err) {
+  } catch (err) {
+      logger.error("Error al modificar producto por ID:", err);
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
-        error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: `${err.message}`,
+          error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+          detalle: `${err.message}`,
       });
-    }
-  };
+  }
+};
 
-  static deleteProduct = async (req, res) => {
-    let { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+static deleteProduct = async (req, res) => {
+  let { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({ error: `Id invalido` });
-    }
+  }
 
-    try {
+  try {
       let resultado = await productoService.eliminarProducto(id);
       if (resultado.deletedCount > 0) {
-        res.status(200).json({
-          message: `Producto id:${id} eliminado de la base de datos`,
-        });
+          res.status(200).json({
+              message: `Producto id:${id} eliminado de la base de datos`,
+          });
       } else {
-        res.setHeader("Content-Type", "application/json");
-        return res
-          .status(400)
-          .json({ error: `No existen productos con id ${id}` });
+          res.setHeader("Content-Type", "application/json");
+          return res
+              .status(400)
+              .json({ error: `No existen productos con id ${id}` });
       }
-    } catch (err) {
+  } catch (err) {
+      logger.error("Error al eliminar producto por ID:", err);
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
-        error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-        detalle: `${err.message}`,
+          error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+          detalle: `${err.message}`,
       });
-    }
-  };
+  }
+};
 
   //faker
   static generaFakeProducts = (req, res) => {

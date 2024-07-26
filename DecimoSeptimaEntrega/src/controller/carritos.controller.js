@@ -13,6 +13,7 @@ export default class cartController {
         .status(200)
         .json({ mensaje: `el carrito fue creado con éxito`, carritoCreado });
     } catch (err) {
+      logger.error("Error al agregar carrito:", err);
       res
         .status(500)
         .json({ error: `no se pudo crear el carrito`, detalle: err.message });
@@ -23,7 +24,6 @@ export default class cartController {
     try {
       let { cid } = req.params;
       let { products } = req.body;
-      
 
       if (!products) {
         return res.status(400).json({
@@ -42,6 +42,7 @@ export default class cartController {
         productosAgregados,
       });
     } catch (err) {
+      logger.error("Error al agregar productos al carrito:", err);
       res.status(500).json({
         error: `no se pudo crear el carrito correctamente. ingrese los datos de un producto.`,
         detalle: err.message,
@@ -55,6 +56,7 @@ export default class cartController {
       let carrito = await carritoService.obtenerCarritosPorId(id);
       res.status(200).json({ carrito });
     } catch (err) {
+      logger.error("Error al obtener el carrito por ID:", err);
       res.status(500).json({
         error: `no se pudo leer un carrito con el id: ${id}`,
         detalle: err.message,
@@ -116,8 +118,9 @@ export default class cartController {
       const carrito = await carritoService.obtenerCarritosPorId(cid);
 
       if (!carrito) {
-        res.status(400),
-          json({ message: " el id del carrito es incorrecto o no existe" });
+        res
+          .status(400)
+          .json({ message: " el id del carrito es incorrecto o no existe" });
       }
 
       const productId = new mongoose.Types.ObjectId(pid);
@@ -137,6 +140,10 @@ export default class cartController {
         carrito,
       });
     } catch (err) {
+      logger.error(
+        "Error al actualizar la cantidad del producto en el carrito:",
+        err
+      );
       res
         .status(500)
         .json({ error: "Error del servidor", detalle: err.message });
@@ -163,6 +170,7 @@ export default class cartController {
         .status(200)
         .json({ message: "producto eliminado con éxito", carrito });
     } catch (err) {
+      logger.error("Error al eliminar el carrito:", err);
       res
         .status(500)
         .json({ error: "Error del servidor", detalle: err.message });
