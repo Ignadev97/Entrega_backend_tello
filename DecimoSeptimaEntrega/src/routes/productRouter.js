@@ -11,7 +11,8 @@ router.get("/mockingproducts", productController.generaFakeProducts)
 
 //agregar producto
 
-router.post("/", productController.addProduct);
+router.post("/",passport.authenticate("jwt", { session: false }),
+authorize(['premium', 'admin']), productController.addProduct);
 
 //traer producto por id
 
@@ -19,11 +20,13 @@ router.get("/:id", productController.getProductById);
 
 //modificar producto con id
 
-router.put("/:id", productController.modifyProductById);
+router.put("/:id", passport.authenticate("jwt", { session: false }),
+authorize(['premium', 'admin']), productController.modifyProductById);
 
 // borrar producto
 
-router.delete("/:id", productController.deleteProduct);
+router.delete("/:id",passport.authenticate("jwt", { session: false }),
+authorize(['premium', 'admin']), productController.deleteProduct);
 
 
 export default router;

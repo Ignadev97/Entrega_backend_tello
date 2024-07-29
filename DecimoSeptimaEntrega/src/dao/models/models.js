@@ -1,5 +1,8 @@
 import mongoose from "mongoose"
 import paginate from "mongoose-paginate-v2"
+import config from "../../config/config.js"
+
+let adminId = new mongoose.Types.ObjectId(config.ADMIN_ID)
 
 const productColl = "products"
 const cartsColl = "carts"
@@ -18,7 +21,12 @@ const productSchema = new mongoose.Schema(
             unique: true
         },
         stock: String,
-        quantity: Number
+        quantity: Number,
+        owner: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref:userColl,
+            default: adminId
+        }
     },
     {
         timestamps: true
@@ -65,7 +73,8 @@ const usuarioSchema = new mongoose.Schema (
         },
         role: {
             type:String, 
-            default: 'user'
+            default: 'user',
+            enum:['user', 'premium', 'admin']
         }
     },
     {

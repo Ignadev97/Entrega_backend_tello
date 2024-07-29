@@ -1,6 +1,5 @@
 import express from "express";
 import productController from "../controller/productos.controller.js";
-import { auth } from "../middlewares/auth.js";
 import authController from "../controller/auth.controller.js";
 const router = express.Router();
 
@@ -25,11 +24,11 @@ router.get("/login", (req, res) => {
   res.setHeader("Content-Type", "text/html").status(200).render("login");
 });
 
-router.get("/perfil", auth, (req, res) => {
+router.get("/perfil",(req, res) => {
   res
     .setHeader("Content-Type", "text/html")
     .status(200)
-    .render("perfil", { login: req.session.usuario });
+    .render("perfil");
 });
 
 router.get("/recupero01", authController.getRecupero01);

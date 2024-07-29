@@ -1,4 +1,4 @@
-import { logger } from './utils/logger.js';
+import { logger } from '../utils/utils.js';
 import { ERRORES } from '../utils/errores.js';
 
 export const handleError = (error, req, res, next) => {

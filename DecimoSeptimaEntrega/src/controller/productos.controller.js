@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { productoService } from "../services/products.services.js";
 import { fakerES_MX as faker } from "@faker-js/faker";
+import config from "../config/config.js";
 
 export default class productController {
   static getProducts = async (req, res) => {
@@ -75,7 +76,7 @@ export default class productController {
 
 
 static addProduct = async (req, res) => {
-  let { title, description, price, code, stock } = req.body;
+  let { title, description, price, code, stock, owner } = req.body;
 
   if (!title || !price || !code || !stock) {
       res.setHeader("Content-Type", "application/json");
@@ -93,6 +94,16 @@ static addProduct = async (req, res) => {
       });
   }
 
+  let userId = req.user._id;
+  let userRole = req.user.role;
+
+  if (userRole === 'premium') {
+    owner = userId;
+  } else if (userRole === 'admin' && !owner) {
+    owner = config.ADMIN_ID; 
+  }
+
+
   try {
       const productoAgregado = await productoService.agregarProducto({
           title,
@@ -100,6 +111,7 @@ static addProduct = async (req, res) => {
           price,
           code,
           stock,
+          owner
       });
       res.setHeader("Content-Type", "application/json");
       res.status(200).json({
@@ -146,6 +158,12 @@ static getProductById = async (req, res) => {
 
 static modifyProductById = async (req, res) => {
   let { id } = req.params;
+
+  let userId = req.user._id
+  let userRole = req.user.role
+
+
+
   if (!mongoose.Types.ObjectId.isValid(id)) {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({ error: `Id invalido` });
@@ -169,56 +187,79 @@ static modifyProductById = async (req, res) => {
       });
   }
 
+
   try {
-      let actualizado = await productoService.actualizarProducto(id, aModificar);
-      if (actualizado.modifiedCount > 0) {
-          res.status(200).json({
-              message: `Producto con id:${id} modificado`,
-          });
-      } else {
-          res.setHeader("Content-Type", "application/json");
-          return res
-              .status(400)
-              .json({ error: `No existen productos con id ${id}` });
-      }
-  } catch (err) {
-      logger.error("Error al modificar producto por ID:", err);
-      res.setHeader("Content-Type", "application/json");
-      return res.status(500).json({
-          error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-          detalle: `${err.message}`,
+    let product = await productoService.obtenerProductoPorId(id);
+
+    if (!product) {
+      return res.status(404).json({ error: `Producto con id ${id} no encontrado` });
+    }
+
+    // Verificar propiedad y roles
+    if (userRole === 'premium' && !product.owner.equals(userId)) {
+      return res.status(403).json({
+        mensaje: 'No autorizado para modificar este producto'
       });
-  }
+    }
+
+    // Actualizar el producto
+    let actualizado = await productoService.actualizarProducto(id, aModificar);
+    if (actualizado.modifiedCount > 0) {
+      res.status(200).json({
+        message: `Producto con id:${id} modificado`,
+      });
+    } else {
+      res.setHeader("Content-Type", "application/json");
+      return res.status(400).json({ error: `No existen productos con id ${id}` });
+    }
+  } catch (err) {
+    logger.error("Error al modificar producto por ID:", err);
+    res.setHeader("Content-Type", "application/json");
+    return res.status(500).json({
+      error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+      detalle: `${err.message}`,
+    });
+    }
 };
 
 static deleteProduct = async (req, res) => {
-  let { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+    let { id } = req.params;
+    let userId = req.user._id;
+    let userRole = req.user.role;
+  
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       res.setHeader("Content-Type", "application/json");
       return res.status(400).json({ error: `Id invalido` });
-  }
-
-  try {
-      let resultado = await productoService.eliminarProducto(id);
-      if (resultado.deletedCount > 0) {
-          res.status(200).json({
-              message: `Producto id:${id} eliminado de la base de datos`,
-          });
-      } else {
-          res.setHeader("Content-Type", "application/json");
-          return res
-              .status(400)
-              .json({ error: `No existen productos con id ${id}` });
+    }
+  
+    try {
+      let product = await productoService.obtenerProductoPorId(id);
+  
+      if (!product) {
+        return res.status(404).json({ error: `Producto con id ${id} no encontrado` });
       }
-  } catch (err) {
+  
+      // Verificar propiedad y roles
+      if (userRole === 'premium' && !product.owner.equals(userId)) {
+        return res.status(403).json({
+          mensaje: 'No autorizado para eliminar este producto'
+        });
+      }
+  
+      await productoService.eliminarProducto(id);
+  
+      res.status(200).json({
+        message: `Producto con id:${id} eliminado`,
+      });
+    } catch (err) {
       logger.error("Error al eliminar producto por ID:", err);
       res.setHeader("Content-Type", "application/json");
       return res.status(500).json({
-          error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
-          detalle: `${err.message}`,
+        error: `Error inesperado en el servidor - Intente más tarde, o contacte a su administrador`,
+        detalle: `${err.message}`,
       });
-  }
-};
+    }
+  };
 
   //faker
   static generaFakeProducts = (req, res) => {

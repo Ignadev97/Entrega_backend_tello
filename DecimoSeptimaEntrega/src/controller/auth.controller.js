@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 export default class authController {
   //registro
   static register = async (req, res) => {
-    let { firstName, lastName, email, password } = req.body;
+    let { firstName, lastName, email, password, role } = req.body;
     if (!firstName || !email || !lastName) {
       return res
         .status(400)
@@ -40,6 +40,7 @@ export default class authController {
         email,
         password,
         cart: cart._id,
+        role
       });
 
       return res
@@ -61,6 +62,7 @@ export default class authController {
 
   static login = async (req, res) => {
     let { email, password } = req.body;
+
 
     if (!email || !password) {
       return res
@@ -134,7 +136,7 @@ export default class authController {
 
     delete usuario.password;
     let token = jwt.sign(usuario, config.SECRET, { expiresIn: "30m" });
-    let url = `http://localhost:3000/api/sessions/recupero02?token=${token}`;
+    let url = `http://localhost:${config.PORT}/api/sessions/recupero02?token=${token}`;
 
     let mensaje = `Usted ha solictado un cambio de contraseña. Si no fue usted por favor comunicarse con el admin. Para proceder haga click <a href=${url}> aqui </a>`;
 
@@ -231,6 +233,7 @@ export default class authController {
   };
 
   static getCurrentUser = (req, res) => {
+
     const usuarioFiltrado = new UserDTO(req.user);
 
     res.setHeader("Content-Type", "application/json");
