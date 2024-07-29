@@ -46,8 +46,6 @@ app.set("views", path.join(__dirname, "../views"))
 
 app.use(express.static(path.join(__dirname, '../public')))  //middleware para servir archivos estáticos  
 
-console.log(path.join(__dirname, '../public'))
-
 
 // meanejador de errores a nivel aplicación. 
 app.use(handleError)

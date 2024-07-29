@@ -1,5 +1,7 @@
 import express from "express";
 import productController from "../controller/productos.controller.js";
+import passport from "passport";
+import authorize from "../middlewares/authorize.js";
 
 const router = express.Router();
 

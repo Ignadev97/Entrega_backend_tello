@@ -1,10 +1,11 @@
 const authorize = (roles = []) => {
   if (typeof roles === "string") {
     roles = [roles];
-  } else {
+  } else if (!Array.isArray(roles)) {
     console.log(
       "El rol del usuario está mal implementado. Por favor verifique."
     );
+    roles = [];
   }
 
   return (req, res, next) => {
@@ -15,7 +16,6 @@ const authorize = (roles = []) => {
 
     //está autorizado?
     if (!roles.includes(req.user.role)) {
-      console.log(req.user);
       return res.status(403).json({ mensaje: "No autorizado" });
     }
 
